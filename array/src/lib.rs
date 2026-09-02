@@ -76,6 +76,13 @@ impl<T> Array<T> {
         }
     }
 
+    pub fn get(&self, index: usize) -> Option<&T> {
+        if index >= self.len {
+            return None;
+        }
+        Some(unsafe { &*self.ptr.as_ptr().add(index) })
+    }
+
     pub fn len(&self) -> usize {
         self.len
     }
@@ -113,6 +120,7 @@ mod tests {
         arr.push(90);
 
         assert_eq!(arr.len(), 9);
+        assert_eq!(arr.get(3), Some(&40));
         assert_eq!(arr.capacity(), 16);
     }
 }

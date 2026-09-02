@@ -35,6 +35,44 @@ impl<T> Array<T> {
             self.ptr = ptr;
             self.len = 1;
             self.capacity = 4;
+        } else if self.len < self.capacity {
+            let offset = self
+                .len
+                .checked_mul(std::mem::size_of::<T>())
+                .expect("cannot reach memory location");
+            assert!(offset < isize::MAX as usize, "Wrapped isize");
+
+            // SAFETY: offset cannot wrap around and pointer is pointing to valid memory
+            // SAFETY: and writing to an offset at self.len is valid
+            unsafe {
+                self.ptr.as_ptr().add(self.len).write(elem);
+            }
+            self.len += 1;
+        } else {
+            debug_assert!(self.len == self.capacity);
+
+            let new_capacity = self.capacity.checked_mul(2).expect("capacity wrapped");
+            let align = std::mem::align_of::<T>();
+            let size = std::mem::size_of::<T>() * self.capacity;
+            size.checked_add(size % align).expect("can't allocate");
+            let ptr = unsafe {
+                let layout = alloc::Layout::from_size_align_unchecked(size, align);
+                let ptr = alloc::realloc(
+                    self.ptr.as_ptr() as *mut u8,
+                    layout,
+                    std::mem::size_of::<T>() * new_capacity,
+                ) as *mut T;
+                let ptr = NonNull::new(ptr)
+                    .expect("realloc returned null ptr, could not reallocate memory");
+
+                ptr.add(self.len).write(elem);
+
+                ptr
+            };
+
+            self.ptr = ptr;
+            self.len += 1;
+            self.capacity = new_capacity;
         }
     }
 
@@ -53,9 +91,18 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let arr = Array::<usize>::new();
+        let mut arr = Array::new();
+        arr.push(10);
+        arr.push(20);
+        arr.push(30);
+        arr.push(40);
+        arr.push(50);
+        arr.push(60);
+        arr.push(70);
+        arr.push(80);
+        arr.push(90);
 
-        assert_eq!(arr.len(), 0);
-        assert_eq!(arr.capacity(), 0);
+        assert_eq!(arr.len(), 9);
+        assert_eq!(arr.capacity(), 16);
     }
 }

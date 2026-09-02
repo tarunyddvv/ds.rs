@@ -85,6 +85,16 @@ impl<T> Array<T> {
     }
 }
 
+impl<T> Drop for Array<T> {
+    fn drop(&mut self) {
+        unsafe {
+            std::ptr::drop_in_place(std::slice::from_raw_parts_mut(self.ptr.as_ptr(), self.len));
+            let layout = alloc::Layout::array::<T>(self.capacity).unwrap();
+            alloc::dealloc(self.ptr.as_ptr() as *mut u8, layout);
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

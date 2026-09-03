@@ -1,4 +1,5 @@
 use std::alloc;
+use std::fmt::Debug;
 use std::ptr::NonNull;
 
 pub struct Array<T> {
@@ -7,13 +8,24 @@ pub struct Array<T> {
     capacity: usize,
 }
 
-impl<T> Array<T> {
+impl<T: Debug> Array<T> {
     pub fn new() -> Self {
         Self {
             ptr: NonNull::dangling(),
             len: 0,
             capacity: 0,
         }
+    }
+
+    pub fn display(&self) {
+        for idx in 0..self.len {
+            if let Some(elem) = self.get(idx) {
+                print!(" |{:#?}| ", elem);
+            } else {
+                break;
+            }
+        }
+        println!("")
     }
 
     pub fn push(&mut self, elem: T) {

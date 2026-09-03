@@ -11,4 +11,6 @@ fn main() {
     arr.push(70);
     arr.push(80);
     arr.push(90);
+
+    arr.display();
 }

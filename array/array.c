@@ -14,7 +14,7 @@ void push(struct Array *arr, int elem) {
 }
 
 void insert(struct Array *arr, int elem, int index) {
-    if (index < 0 || index >= arr->capacity) return;
+    if (index < 0 || index >= arr->len) return;
     for(int i=arr->len;i>index;i--){
         arr->arr[i] = arr->arr[i-1];
     }
@@ -60,6 +60,44 @@ int binarySearch(struct Array arr, int elem) {
     }
 
     return -1;
+}
+
+int get(struct Array arr, int index) {
+    if (index < 0 || index >= arr.capacity) return -1;
+    return arr.arr[index];
+}
+
+void set(struct Array *arr, int index, int elem) {
+    if (index < 0 || index >= arr->len) return;
+    arr->arr[index] = elem;
+}
+
+int min(struct Array arr) {
+    int min=arr.arr[0];
+    for(int i=1;i<arr.len;i++) {
+        if (arr.arr[i] < min) {
+            min = arr.arr[i];
+        }
+    }
+    return min;
+}
+
+int max(struct Array arr) {
+    int max=arr.arr[0];
+    for(int i=1;i<arr.len;i++) {
+        if (arr.arr[i] > max) {
+            max = arr.arr[i];
+        }
+    }
+    return max;
+}
+
+int sum(struct Array arr) {
+    int sum=0;
+    for(int i=0;i<arr.len;i++) {
+        sum += arr.arr[i];
+    }
+    return sum;
 }
 
 int main() {

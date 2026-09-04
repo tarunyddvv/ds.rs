@@ -37,6 +37,15 @@ void display(struct Array arr) {
     printf("\n");
 }
 
+int linearSearch(struct Array arr, int elem) {
+    for(int i=0;i<arr.len;i++){
+        if(arr.arr[i] == elem){
+            return i;
+        }
+    }
+    return -1;
+}
+
 int main() {
     struct Array arr = {{10, 20, 30, 40}, 15, 4};
     // push(&arr, 10);
@@ -47,5 +56,7 @@ int main() {
     // insert(&arr, 5, 1);
 
     display(arr);
+
+    printf("elem 30 is at index: %d\n", linearSearch(arr, 30));
     return 0;
 }

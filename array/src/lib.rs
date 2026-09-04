@@ -81,9 +81,6 @@ impl<T: Debug> Array<T> {
         let ptr = unsafe { alloc::alloc(layout) } as *mut T;
         let ptr = NonNull::new(ptr).expect("alloc returned null ptr, could not allocate memory");
 
-        // SAFETY: ptr is non-null and we have just allocated enough space for this item.
-        // unsafe { ptr.as_ptr().write(elem) };
-
         self.ptr = ptr;
         self.len = 1;
         self.capacity = 4;

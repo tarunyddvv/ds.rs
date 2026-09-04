@@ -12,6 +12,14 @@ void push(struct Array *arr, int elem) {
     arr->len += 1;
 }
 
+void insert(struct Array *arr, int elem, int index) {
+    for(int i=arr->len;i>index;i--){
+        arr->ptr[i] = arr->ptr[i-1];
+    }
+    arr->ptr[index] = elem;
+    arr->len += 1;
+}
+
 void display(struct Array arr) {
     for(int i=0;i<arr.len;i++){
         printf(" |%d| ", arr.ptr[i]);
@@ -29,6 +37,8 @@ int main() {
     push(&arr, 20);
     push(&arr, 30);
     push(&arr, 40);
+
+    insert(&arr, 5, 1);
 
     display(arr);
 

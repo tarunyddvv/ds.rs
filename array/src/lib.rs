@@ -28,25 +28,75 @@ impl<T: Debug> Array<T> {
         println!("")
     }
 
+    pub fn insert(&mut self, index: usize, elem: T) {
+        assert_ne!(std::mem::size_of::<T>(), 0, "No zero sized types");
+        assert!(index <= self.len, "index out of bound");
+
+        if self.len == self.capacity {
+            self.grow();
+        }
+
+        // SAFETY: index <= len, len < capacity, so
+        // SAFETY: [index..len] and [index+1..len+1] are in-bounds and valid.
+        // SAFETY: copy handles overlap, then index slot is uninit for write.
+        unsafe {
+            let p = self.ptr.as_ptr();
+            std::ptr::copy(p.add(index), p.add(index + 1), self.len - index);
+            p.add(index).write(elem);
+        }
+        self.len += 1;
+    }
+
+    pub fn grow(&mut self) {
+        debug_assert!(self.len == self.capacity);
+
+        let new_capacity = self.capacity.checked_mul(2).expect("capacity wrapped");
+        let align = std::mem::align_of::<T>();
+        let size = std::mem::size_of::<T>() * self.capacity;
+        size.checked_add(size % align).expect("can't allocate");
+        let ptr = unsafe {
+            let layout = alloc::Layout::from_size_align_unchecked(size, align);
+            let ptr = alloc::realloc(
+                self.ptr.as_ptr() as *mut u8,
+                layout,
+                std::mem::size_of::<T>() * new_capacity,
+            ) as *mut T;
+            let ptr =
+                NonNull::new(ptr).expect("realloc returned null ptr, could not reallocate memory");
+
+            ptr
+        };
+
+        self.ptr = ptr;
+        self.len += 1;
+        self.capacity = new_capacity;
+    }
+
+    pub fn reserve(&mut self) {
+        let layout =
+            alloc::Layout::array::<T>(4).expect("overflow happened could not allocate the array");
+
+        // SAFETY: the layout is hardcoded to be 4 * size_of<T> and
+        // SAFETY: size_of<T> is > 0
+        let ptr = unsafe { alloc::alloc(layout) } as *mut T;
+        let ptr = NonNull::new(ptr).expect("alloc returned null ptr, could not allocate memory");
+
+        // SAFETY: ptr is non-null and we have just allocated enough space for this item.
+        // unsafe { ptr.as_ptr().write(elem) };
+
+        self.ptr = ptr;
+        self.len = 1;
+        self.capacity = 4;
+    }
+
     pub fn push(&mut self, elem: T) {
         assert_ne!(std::mem::size_of::<T>(), 0, "No zero sized types");
 
         if self.capacity == 0 {
-            let layout = alloc::Layout::array::<T>(4)
-                .expect("overflow happened could not allocate the array");
-
-            // SAFETY: the layout is hardcoded to be 4 * size_of<T> and
-            // SAFETY: size_of<T> is > 0
-            let ptr = unsafe { alloc::alloc(layout) } as *mut T;
-            let ptr =
-                NonNull::new(ptr).expect("alloc returned null ptr, could not allocate memory");
+            self.reserve();
 
             // SAFETY: ptr is non-null and we have just allocated enough space for this item.
-            unsafe { ptr.as_ptr().write(elem) };
-
-            self.ptr = ptr;
-            self.len = 1;
-            self.capacity = 4;
+            unsafe { self.ptr.as_ptr().write(elem) };
         } else if self.len < self.capacity {
             let offset = self
                 .len
@@ -61,30 +111,12 @@ impl<T: Debug> Array<T> {
             }
             self.len += 1;
         } else {
-            debug_assert!(self.len == self.capacity);
+            self.grow();
 
-            let new_capacity = self.capacity.checked_mul(2).expect("capacity wrapped");
-            let align = std::mem::align_of::<T>();
-            let size = std::mem::size_of::<T>() * self.capacity;
-            size.checked_add(size % align).expect("can't allocate");
-            let ptr = unsafe {
-                let layout = alloc::Layout::from_size_align_unchecked(size, align);
-                let ptr = alloc::realloc(
-                    self.ptr.as_ptr() as *mut u8,
-                    layout,
-                    std::mem::size_of::<T>() * new_capacity,
-                ) as *mut T;
-                let ptr = NonNull::new(ptr)
-                    .expect("realloc returned null ptr, could not reallocate memory");
-
-                ptr.add(self.len).write(elem);
-
-                ptr
-            };
-
-            self.ptr = ptr;
-            self.len += 1;
-            self.capacity = new_capacity;
+            // SAFETY: ptr is non-null and we have just allocated enough space for this item.
+            unsafe {
+                self.ptr.add(self.len).write(elem);
+            }
         }
     }
 

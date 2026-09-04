@@ -32,5 +32,7 @@ int main() {
 
     display(arr);
 
+    free(arr.ptr);
+
     return 0;
 }

@@ -31,7 +31,7 @@ void delete(struct Array *arr, int index) {
 }
 
 void display(struct Array arr) {
-    for(int i=0;i<arr.len+1;i++){
+    for(int i=0;i<arr.len;i++){
         printf(" |%d| ", arr.arr[i]);
     }
     printf("\n");
@@ -100,6 +100,21 @@ int sum(struct Array arr) {
     return sum;
 }
 
+void swap(int *x, int *y) {
+    int temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
+void reverse(struct Array *arr) {
+    int l=0,r=arr->len-1;
+    while (l < r) {
+        swap(&arr->arr[l], &arr->arr[r]);
+        l++;
+        r--;
+    }
+}
+
 int main() {
     struct Array arr = {{10, 20, 30, 40}, 15, 4};
     // push(&arr, 10);
@@ -113,5 +128,10 @@ int main() {
 
     printf("elem 30 is at index: %d\n", linearSearch(arr, 30));
     printf("elem 30 is at index: %d\n", binarySearch(arr, 30));
+
+    reverse(&arr);
+
+    display(arr);
+
     return 0;
 }

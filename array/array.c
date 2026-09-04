@@ -2,47 +2,50 @@
 #include <stdlib.h>
 
 struct Array {
-    int *ptr;
+    int arr[10];
     int capacity;
     int len;
 };
 
 void push(struct Array *arr, int elem) {
-    arr->ptr[arr->len] = elem;
+    if (arr->len < arr->capacity)
+        arr->arr[arr->len] = elem;
     arr->len += 1;
 }
 
 void insert(struct Array *arr, int elem, int index) {
+    if (index < 0 || index >= arr->capacity) return;
     for(int i=arr->len;i>index;i--){
-        arr->ptr[i] = arr->ptr[i-1];
+        arr->arr[i] = arr->arr[i-1];
     }
-    arr->ptr[index] = elem;
+    arr->arr[index] = elem;
     arr->len += 1;
 }
 
+void delete(struct Array *arr, int index) {
+    if (index < 0 || index >= arr->capacity) return;
+    for(int i=index;i<arr->len-1;i++){
+        arr->arr[i] = arr->arr[i+1];
+    }
+    arr->len -= 1;
+}
+
 void display(struct Array arr) {
-    for(int i=0;i<arr.len;i++){
-        printf(" |%d| ", arr.ptr[i]);
+    for(int i=0;i<arr.len+1;i++){
+        printf(" |%d| ", arr.arr[i]);
     }
     printf("\n");
 }
 
 int main() {
-    struct Array arr;
-    arr.capacity = 4;
-    arr.len = 0;
+    struct Array arr = {{10, 20, 30, 40}, 15, 4};
+    // push(&arr, 10);
+    // push(&arr, 20);
+    // push(&arr, 30);
+    // push(&arr, 40);
 
-    arr.ptr = (int *)malloc(arr.capacity * sizeof(int));
-    push(&arr, 10);
-    push(&arr, 20);
-    push(&arr, 30);
-    push(&arr, 40);
-
-    insert(&arr, 5, 1);
+    // insert(&arr, 5, 1);
 
     display(arr);
-
-    free(arr.ptr);
-
     return 0;
 }

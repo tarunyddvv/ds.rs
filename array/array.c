@@ -46,6 +46,22 @@ int linearSearch(struct Array arr, int elem) {
     return -1;
 }
 
+int binarySearch(struct Array arr, int elem) {
+    int l=0, h=arr.len-1, mid = 0;
+    while(l<=h){
+        mid=(l+h)/2;
+        if(arr.arr[mid] == elem) {
+            return mid;
+        } else if (elem < arr.arr[mid]){
+            h = mid-1;
+        } else {
+            l = mid+1;
+        }
+    }
+
+    return -1;
+}
+
 int main() {
     struct Array arr = {{10, 20, 30, 40}, 15, 4};
     // push(&arr, 10);
@@ -58,5 +74,6 @@ int main() {
     display(arr);
 
     printf("elem 30 is at index: %d\n", linearSearch(arr, 30));
+    printf("elem 30 is at index: %d\n", binarySearch(arr, 30));
     return 0;
 }

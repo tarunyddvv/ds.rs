@@ -73,6 +73,15 @@ int min(struct LinkedList *ll) {
     return min;
 }
 
+int search(struct LinkedList *ll, int elem) {
+    struct Node *temp = ll->head;
+    while (temp != NULL) {
+        if (temp->data == elem) return 1;
+        temp = temp->next;
+    }
+    return 0;
+}
+
 int main()
 {
     int arr[5] = {8, 3 , 7, 12, 9};
@@ -86,7 +95,10 @@ int main()
     printf("%p\n", ll->tail);
     printf("%d\n", sum(ll));
 
-
-
+    if (search(ll, 6)) {
+        printf("6 is present\n");
+    } else {
+        printf("6 is absent\n");
+    }
     return 0;
 }

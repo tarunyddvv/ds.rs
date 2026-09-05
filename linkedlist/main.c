@@ -17,6 +17,7 @@ void insertFromArray(int arr[], int len, struct LinkedList *ll) {
     head->data = arr[0];
     head->next = NULL;
     ll->head = head;
+    ll->len += 1;
 
     struct Node *ptr = head;
     for(int i=1;i<len;i++){
@@ -26,6 +27,8 @@ void insertFromArray(int arr[], int len, struct LinkedList *ll) {
         ll->tail = temp;
         ptr->next = temp;
         ptr = ptr->next;
+
+        ll->len += 1;
     }
 }
 
@@ -38,6 +41,16 @@ void display(struct LinkedList *ll) {
     printf("NULL\n");
 }
 
+int sum(struct LinkedList *ll) {
+    struct Node *temp = ll->head;
+    int sum = 0;
+    while(temp != NULL) {
+        sum += temp->data;
+        temp = temp->next;
+    }
+    return sum;
+}
+
 int main()
 {
     int arr[5] = {8, 3 , 7, 12, 9};
@@ -45,6 +58,13 @@ int main()
 
     insertFromArray(arr, 5, ll);
     display(ll);
+
+    printf("%d\n", ll->len);
+    printf("%p\n", ll->head);
+    printf("%p\n", ll->tail);
+    printf("%d\n", sum(ll));
+
+
 
     return 0;
 }

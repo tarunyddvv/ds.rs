@@ -150,6 +150,7 @@ void delete(struct LinkedList *ll, int elem) {
         prev = curr;
         curr = curr->next;
     }
+    if(curr == NULL) return;
     prev->next = curr->next;
     curr->next = NULL;
 
@@ -157,12 +158,29 @@ void delete(struct LinkedList *ll, int elem) {
     free(curr);
 }
 
+void removeDuplicates(struct LinkedList *ll) {
+    struct Node *curr = ll->head->next, *prev = ll->head;
+
+    while(curr != NULL) {
+        if (curr->data != prev->data) {
+            prev->next = curr;
+            prev = curr;
+            curr = curr->next;
+        } else if (curr->data == prev->data) {
+            struct Node *stale = curr;
+            curr = curr->next;
+            free(stale);
+        }
+    }
+    if(curr == NULL) prev->next = curr;
+}
+
 int main() {
-  int arr[5] = {3, 7, 9, 15, 20};
+  int arr[6] = {3, 5, 5, 8, 8, 8};
   struct LinkedList *ll =
       (struct LinkedList *)malloc(sizeof(struct LinkedList));
 
-  insertFromArray(arr, 5, ll);
+  insertFromArray(arr, 6, ll);
   display(ll);
 
   // printf("%d\n", ll->len);
@@ -194,11 +212,13 @@ int main() {
   // display(ll);
   // printf("length: %d\n", ll->len);
 
-  insertSorted(ll, 8);
+  // insertSorted(ll, 8);
+  // display(ll);
+
+  // delete(ll, 8);
+
   display(ll);
-
-  delete(ll, 8);
-
+  removeDuplicates(ll);
   display(ll);
 
   return 0;

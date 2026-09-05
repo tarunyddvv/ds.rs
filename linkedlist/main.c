@@ -51,6 +51,28 @@ int sum(struct LinkedList *ll) {
     return sum;
 }
 
+int max(struct LinkedList *ll) {
+    struct Node *temp = ll->head;
+    int max = temp->data;
+    while(temp != NULL) {
+        if (temp->data > max)
+            max = temp->data;
+        temp = temp->next;
+    }
+    return max;
+}
+
+int min(struct LinkedList *ll) {
+    struct Node *temp = ll->head;
+    int min = temp->data;
+    while(temp != NULL) {
+        if (temp->data < min)
+            min = temp->data;
+        temp = temp->next;
+    }
+    return min;
+}
+
 int main()
 {
     int arr[5] = {8, 3 , 7, 12, 9};

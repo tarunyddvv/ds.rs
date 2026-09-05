@@ -91,23 +91,21 @@ void insertFirst(struct LinkedList *ll, int elem) {
 
   new_node->next = ll->head;
   ll->head = new_node;
+  ll->len += 1;
 }
 
 void insertLast(struct LinkedList *ll, int elem) {
-  struct Node *new_node = (struct Node *)malloc(sizeof(struct Node)),
-              *temp = ll->head;
+  struct Node *new_node = (struct Node *)malloc(sizeof(struct Node));
   new_node->data = elem;
   new_node->next = NULL;
 
-  while (temp->next != NULL) {
-    temp = temp->next;
-  }
-
-  temp->next = new_node;
+  ll->tail->next = new_node;
+  ll->tail = new_node;
+  ll->len += 1;
 }
 
 void insert(struct LinkedList *ll, int index, int elem) {
-  if (index > ll->len || index < 0)
+  if (index > ll->len-1 || index < 0)
     return;
   if (index == 0) {
     insertFirst(ll, elem);
@@ -124,8 +122,8 @@ void insert(struct LinkedList *ll, int index, int elem) {
     }
     new_node->next = temp->next;
     temp->next = new_node;
+    ll->len += 1;
   }
-  ll->len += 1;
 }
 
 int main() {
@@ -147,13 +145,22 @@ int main() {
     printf("6 is absent\n");
   }
 
+  printf("length before inserting 2 at 0: %d\n", ll->len);
   insert(ll, 0, 2);
-  insert(ll, 6, 100);
+  insertFirst(ll, 1);
+  display(ll);
+
+  printf("length before inserting 100 at 6: %d\n", ll->len);
+  insertLast(ll, 200);
+  insert(ll, 5, 900);
 
   display(ll);
 
+  printf("length before inserting 32 at 2: %d\n", ll->len);
   insert(ll, 2, 32);
 
+  insertLast(ll, 500);
   display(ll);
+  printf("length: %d\n", ll->len);
   return 0;
 }

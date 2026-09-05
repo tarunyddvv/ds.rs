@@ -36,7 +36,7 @@ void insertFromArray(int arr[], int len, struct LinkedList *ll) {
 void display(struct LinkedList *ll) {
   struct Node *temp = ll->head;
   while (temp != NULL) {
-    printf("| %d |->", temp->data);
+    printf("| %d | -> ", temp->data);
     temp = temp->next;
   }
   printf("NULL\n");
@@ -127,16 +127,34 @@ void insert(struct LinkedList *ll, int index, int elem) {
 }
 
 void insertSorted(struct LinkedList *ll, int elem) {
-    struct Node *new_node = (struct Node *)malloc(sizeof(struct Node)), *prev, *next = ll->head;
+    struct Node *new_node = (struct Node *)malloc(sizeof(struct Node)), *prev = ll->head, *next = ll->head;
     new_node->data = elem;
     new_node->next = NULL;
 
-    while(elem >= next->data) {
+    if(ll->head == NULL) {
+        ll->head = new_node;
+        return;
+    }
+    while(next->data < elem && next != NULL) {
         prev = next;
         next = next->next;
     }
-    new_node->next = next;
+    new_node->next = prev->next;
     prev->next = new_node;
+}
+
+void delete(struct LinkedList *ll, int elem) {
+    struct Node *curr = ll->head, *prev = ll->head;
+
+    while(curr != NULL && curr->data != elem) {
+        prev = curr;
+        curr = curr->next;
+    }
+    prev->next = curr->next;
+    curr->next = NULL;
+
+    ll->len--;
+    free(curr);
 }
 
 int main() {
@@ -177,6 +195,9 @@ int main() {
   // printf("length: %d\n", ll->len);
 
   insertSorted(ll, 8);
+  display(ll);
+
+  delete(ll, 8);
 
   display(ll);
 

@@ -1,4 +1,3 @@
-#include <_stdio.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -241,14 +240,15 @@ void merge(struct LinkedList *ll1, struct LinkedList *ll2) {
 }
 
 int isLoop(struct LinkedList *ll) {
-    struct Node *slow = ll->head, *fast = ll->head;
+  struct Node *slow = ll->head, *fast = ll->head;
 
-    while (fast && fast->next) {
-        slow = slow->next;
-        fast = fast->next->next;
-        if (slow == fast) return 1;
-    }
-    return 0;
+  while (fast && fast->next) {
+    slow = slow->next;
+    fast = fast->next->next;
+    if (slow == fast)
+      return 1;
+  }
+  return 0;
 }
 
 int main() {
@@ -270,51 +270,8 @@ int main() {
   insertFromArray(arr2, 3, ll2);
   display(ll2);
 
-  // printf("%d\n", ll->len);
-  // printf("%p\n", ll->head);
-  // printf("%p\n", ll->tail);
-  // printf("%d\n", sum(ll));
-
-  // if (search(ll, 6)) {
-  //   printf("6 is present\n");
-  // } else {
-  //   printf("6 is absent\n");
-  // }
-
-  // printf("length before inserting 2 at 0: %d\n", ll->len);
-  // insert(ll, 0, 2);
-  // insertFirst(ll, 1);
-  // display(ll);
-
-  // printf("length before inserting 100 at 6: %d\n", ll->len);
-  // insert(ll, 5, 900);
-
-  // display(ll);
-
-  // printf("length before inserting 32 at 2: %d\n", ll->len);
-  // insert(ll, 2, 32);
-
-  // insertLast(ll, 500);
-  // display(ll);
-  // printf("length: %d\n", ll->len);
-
-  // insertSorted(ll, 8);
-  // display(ll);
-
-  // delete(ll, 8);
-
-  // display(ll);
-  // removeDuplicates(ll);
-  // display(ll);
-
-  // insertLast(ll, 200);
-  // reverse(ll);
-
-  // display(ll);
-
-  merge(ll1, ll2);
-
-  display(ll2);
+  printf("tail is at for ll1: %d\n", ll1->tail->data);
+  printf("tail is at for ll2: %d\n", ll2->tail->data);
 
   return 0;
 }

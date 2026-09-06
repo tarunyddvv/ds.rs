@@ -1,3 +1,4 @@
+#include <_stdio.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -225,12 +226,11 @@ void merge(struct LinkedList *ll1, struct LinkedList *ll2) {
       last->next = NULL;
     }
   }
-  if (first != NULL){
+  if (first != NULL) {
     last->next = first;
     ll1->tail = first;
     ll2->tail = first;
-  }
-  else {
+  } else {
     last->next = second;
     ll1->tail = second;
     ll2->tail = second;
@@ -238,6 +238,17 @@ void merge(struct LinkedList *ll1, struct LinkedList *ll2) {
 
   ll1->head = third;
   ll2->head = third;
+}
+
+int isLoop(struct LinkedList *ll) {
+    struct Node *slow = ll->head, *fast = ll->head;
+
+    while (fast && fast->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+        if (slow == fast) return 1;
+    }
+    return 0;
 }
 
 int main() {

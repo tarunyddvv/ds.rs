@@ -175,12 +175,24 @@ void removeDuplicates(struct LinkedList *ll) {
     if(curr == NULL) prev->next = curr;
 }
 
+void reverse(struct LinkedList *ll) {
+    struct Node *left = NULL, *mid = NULL, *right = ll->head;
+
+    while(right != NULL) {
+        left = mid;
+        mid = right;
+        right = right->next;
+        mid->next = left;
+    }
+    ll->head = mid;
+}
+
 int main() {
-  int arr[6] = {3, 5, 5, 8, 8, 8};
+  int arr[4] = {2, 4, 6, 8};
   struct LinkedList *ll =
       (struct LinkedList *)malloc(sizeof(struct LinkedList));
 
-  insertFromArray(arr, 6, ll);
+  insertFromArray(arr, 4, ll);
   display(ll);
 
   // printf("%d\n", ll->len);
@@ -217,8 +229,12 @@ int main() {
 
   // delete(ll, 8);
 
-  display(ll);
-  removeDuplicates(ll);
+  // display(ll);
+  // removeDuplicates(ll);
+  // display(ll);
+
+  reverse(ll);
+
   display(ll);
 
   return 0;

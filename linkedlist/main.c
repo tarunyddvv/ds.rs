@@ -1,4 +1,3 @@
-#include <_stdio.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -196,12 +195,42 @@ void concat(struct LinkedList *ll1, struct LinkedList *ll2) {
     temp->next = ll2->head;
 }
 
+void merge(struct LinkedList *ll1, struct LinkedList *ll2) {
+    struct Node *first = ll1->head, *second = ll2->head, *third = NULL, *last = NULL;
+
+    if (first->data < second->data) {
+        third = last = first;
+        first = first->next;
+        last->next = NULL;
+    } else {
+        third = last = second;
+        second = second->next;
+        last->next = NULL;
+    }
+
+    while(first != NULL && second != NULL){
+        if (first->data < second->data) {
+            last->next = first;
+            last = first;
+            first = first->next;
+            last->next = NULL;
+        } else {
+            last->next = second;
+            last = second;
+            second = second->next;
+            last->next = NULL;
+        }
+    }
+    if (first != NULL) last->next = first;
+    else last->next = second;
+}
+
 int main() {
   int arr1[4] = {2, 4, 6, 8};
   struct LinkedList *ll1 =
       (struct LinkedList *)malloc(sizeof(struct LinkedList));
 
-  int arr2[3] = {10, 4, 7};
+  int arr2[3] = {3, 7,12,};
   struct LinkedList *ll2 =
       (struct LinkedList *)malloc(sizeof(struct LinkedList));
 
@@ -253,7 +282,7 @@ int main() {
 
   // display(ll);
 
-  concat(ll1, ll2);
+  merge(ll1, ll2);
 
   display(ll1);
 

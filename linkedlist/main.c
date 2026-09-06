@@ -17,6 +17,7 @@ void insertFromArray(int arr[], int len, struct LinkedList *ll) {
   head->data = arr[0];
   head->next = NULL;
   ll->head = head;
+  ll->tail = head;
   ll->len += 1;
 
   struct Node *ptr = head;

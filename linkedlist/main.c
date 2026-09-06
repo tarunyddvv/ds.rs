@@ -104,7 +104,7 @@ void insertLast(struct LinkedList *ll, int elem) {
 }
 
 void insert(struct LinkedList *ll, int index, int elem) {
-  if (index > ll->len-1 || index < 0)
+  if (index > ll->len - 1 || index < 0)
     return;
   if (index == 0) {
     insertFirst(ll, elem);
@@ -126,103 +126,118 @@ void insert(struct LinkedList *ll, int index, int elem) {
 }
 
 void insertSorted(struct LinkedList *ll, int elem) {
-    struct Node *new_node = (struct Node *)malloc(sizeof(struct Node)), *prev = ll->head, *next = ll->head;
-    new_node->data = elem;
-    new_node->next = NULL;
+  struct Node *new_node = (struct Node *)malloc(sizeof(struct Node)),
+              *prev = ll->head, *next = ll->head;
+  new_node->data = elem;
+  new_node->next = NULL;
 
-    if(ll->head == NULL) {
-        ll->head = new_node;
-        return;
-    }
-    while(next->data < elem && next != NULL) {
-        prev = next;
-        next = next->next;
-    }
-    new_node->next = prev->next;
-    prev->next = new_node;
+  if (ll->head == NULL) {
+    ll->head = new_node;
+    return;
+  }
+  while (next->data < elem && next != NULL) {
+    prev = next;
+    next = next->next;
+  }
+  new_node->next = prev->next;
+  prev->next = new_node;
 }
 
 void delete(struct LinkedList *ll, int elem) {
-    struct Node *curr = ll->head, *prev = ll->head;
+  struct Node *curr = ll->head, *prev = ll->head;
 
-    while(curr != NULL && curr->data != elem) {
-        prev = curr;
-        curr = curr->next;
-    }
-    if(curr == NULL) return;
-    prev->next = curr->next;
-    curr->next = NULL;
+  while (curr != NULL && curr->data != elem) {
+    prev = curr;
+    curr = curr->next;
+  }
+  if (curr == NULL)
+    return;
+  prev->next = curr->next;
+  curr->next = NULL;
 
-    ll->len--;
-    free(curr);
+  ll->len--;
+  free(curr);
 }
 
 void removeDuplicates(struct LinkedList *ll) {
-    struct Node *curr = ll->head->next, *prev = ll->head;
+  struct Node *curr = ll->head->next, *prev = ll->head;
 
-    while(curr != NULL) {
-        if (curr->data != prev->data) {
-            prev->next = curr;
-            prev = curr;
-            curr = curr->next;
-        } else if (curr->data == prev->data) {
-            struct Node *stale = curr;
-            curr = curr->next;
-            free(stale);
-        }
+  while (curr != NULL) {
+    if (curr->data != prev->data) {
+      prev->next = curr;
+      prev = curr;
+      curr = curr->next;
+    } else if (curr->data == prev->data) {
+      struct Node *stale = curr;
+      curr = curr->next;
+      free(stale);
     }
-    if(curr == NULL) prev->next = curr;
+  }
+  if (curr == NULL)
+    prev->next = curr;
 }
 
 void reverse(struct LinkedList *ll) {
-    struct Node *left = NULL, *mid = NULL, *right = ll->head;
+  struct Node *left = NULL, *mid = NULL, *right = ll->head;
 
-    while(right != NULL) {
-        left = mid;
-        mid = right;
-        right = right->next;
-        mid->next = left;
-    }
-    ll->tail = ll->head;
-    ll->head = mid;
+  while (right != NULL) {
+    left = mid;
+    mid = right;
+    right = right->next;
+    mid->next = left;
+  }
+  ll->tail = ll->head;
+  ll->head = mid;
 }
 
 void concat(struct LinkedList *ll1, struct LinkedList *ll2) {
-    struct Node *temp = ll1->head;
-    while(temp->next != NULL) {
-        temp = temp->next;
-    }
-    temp->next = ll2->head;
+  struct Node *temp = ll1->head;
+  while (temp->next != NULL) {
+    temp = temp->next;
+  }
+  temp->next = ll2->head;
 }
 
 void merge(struct LinkedList *ll1, struct LinkedList *ll2) {
-    struct Node *first = ll1->head, *second = ll2->head, *third = NULL, *last = NULL;
+  struct Node *first = ll1->head, *second = ll2->head, *third = NULL,
+              *last = NULL;
 
+  if (first->data < second->data) {
+    third = last = first;
+    first = first->next;
+    last->next = NULL;
+  } else {
+    third = last = second;
+    second = second->next;
+    last->next = NULL;
+  }
+
+  while (first != NULL && second != NULL) {
     if (first->data < second->data) {
-        third = last = first;
-        first = first->next;
-        last->next = NULL;
+      last->next = first;
+      last = first;
+      first = first->next;
+      last->next = NULL;
     } else {
-        third = last = second;
-        second = second->next;
-        last->next = NULL;
+      last->next = second;
+      last = second;
+      second = second->next;
+      last->next = NULL;
     }
+  }
+  if (first != NULL){
+    last->next = first;
+    ll1->tail = first;
+    ll2->tail = first;
+  }
+  else {
+    last->next = second;
+    ll1->tail = second;
+    ll2->tail = second;
+  }
 
-    while(first != NULL && second != NULL){
-        if (first->data < second->data) {
-            last->next = first;
-            last = first;
-            first = first->next;
-            last->next = NULL;
-        } else {
-            last->next = second;
-            last = second;
-            second = second->next;
-            last->next = NULL;
-        }
-    }
-    if (first != NULL) last->next = first;
-    else last->next = second;
+  ll1->head = third;
+  ll2->head = third;
 }
 
 int main() {
@@ -230,7 +245,11 @@ int main() {
   struct LinkedList *ll1 =
       (struct LinkedList *)malloc(sizeof(struct LinkedList));
 
-  int arr2[3] = {3, 7,12,};
+  int arr2[3] = {
+      3,
+      7,
+      12,
+  };
   struct LinkedList *ll2 =
       (struct LinkedList *)malloc(sizeof(struct LinkedList));
 
@@ -284,7 +303,7 @@ int main() {
 
   merge(ll1, ll2);
 
-  display(ll1);
+  display(ll2);
 
   return 0;
 }

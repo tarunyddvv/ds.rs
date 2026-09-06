@@ -184,16 +184,32 @@ void reverse(struct LinkedList *ll) {
         right = right->next;
         mid->next = left;
     }
+    ll->tail = ll->head;
     ll->head = mid;
 }
 
+void concat(struct LinkedList *ll1, struct LinkedList *ll2) {
+    struct Node *temp = ll1->head;
+    while(temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = ll2->head;
+}
+
 int main() {
-  int arr[4] = {2, 4, 6, 8};
-  struct LinkedList *ll =
+  int arr1[4] = {2, 4, 6, 8};
+  struct LinkedList *ll1 =
       (struct LinkedList *)malloc(sizeof(struct LinkedList));
 
-  insertFromArray(arr, 4, ll);
-  display(ll);
+  int arr2[3] = {10, 4, 7};
+  struct LinkedList *ll2 =
+      (struct LinkedList *)malloc(sizeof(struct LinkedList));
+
+  insertFromArray(arr1, 4, ll1);
+  display(ll1);
+
+  insertFromArray(arr2, 3, ll2);
+  display(ll2);
 
   // printf("%d\n", ll->len);
   // printf("%p\n", ll->head);
@@ -212,7 +228,6 @@ int main() {
   // display(ll);
 
   // printf("length before inserting 100 at 6: %d\n", ll->len);
-  // insertLast(ll, 200);
   // insert(ll, 5, 900);
 
   // display(ll);
@@ -233,9 +248,14 @@ int main() {
   // removeDuplicates(ll);
   // display(ll);
 
-  reverse(ll);
+  // insertLast(ll, 200);
+  // reverse(ll);
 
-  display(ll);
+  // display(ll);
+
+  concat(ll1, ll2);
+
+  display(ll1);
 
   return 0;
 }

@@ -31,8 +31,8 @@ void push(struct Stack *st, int elem) {
 
 int pop(struct Stack *st) {
     if(st->top == -1) {
-        printf("stack is empty");
-        free(st);
+        printf("stack is empty nothing to remove\n");
+        return -1;
     }
 
     int elem = st->arr[st->top];
@@ -44,7 +44,7 @@ int pop(struct Stack *st) {
 
 int top(struct Stack *st) {
   if (isEmpty(st)) {
-    printf("stack is empty");
+    printf("stack is empty\n");
     return -1;
   }
 
@@ -81,10 +81,18 @@ int main() {
 
   printf("removed elem: %d\n", pop(st));
 
+  printf("removed elem: %d\n", pop(st));
+
+  printf("removed elem: %d\n", pop(st));
+
+  printf("removed elem: %d\n", pop(st));
+
+  printf("removed elem: %d\n", pop(st));
+
   display(st);
 
-  free(arr);
   free(st);
+  free(arr);
 
   return 0;
 }

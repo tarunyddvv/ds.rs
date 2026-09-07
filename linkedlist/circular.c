@@ -82,6 +82,31 @@ void insert(struct LinkedList *ll, int elem, int index) {
     }
 }
 
+void delete(struct LinkedList *ll, int elem) {
+    struct Node *temp = ll->head, *prev = ll->head;
+
+    if(elem == temp->data) {
+        ll->tail->next = temp->next;
+        ll->head = temp->next;
+        temp->next = NULL;
+        free(temp);
+    }
+
+     do {
+        if(temp->data == elem) {
+            prev->next = temp->next;
+            temp->next = NULL;
+            free(temp);
+        }
+        if (temp->data == ll->tail->data) {
+            ll->tail = prev;
+        }
+        prev = temp;
+        temp = temp->next;
+    } while(temp != ll->head && temp != NULL);
+    ll->len -= 1;
+}
+
 int main()
 {
     int arr1[4] = {2, 4, 6, 8};
@@ -100,6 +125,27 @@ int main()
     insert(ll, 3, 5);
     insert(ll, 10, 3);
 
+    display(ll);
+
+    printf("head %d\n", ll->head->data);
+    printf("tail %d\n", ll->tail->data);
+    printf("length %d\n", ll->len);
+
+    delete(ll, 3);
+    display(ll);
+
+    printf("head %d\n", ll->head->data);
+    printf("tail %d\n", ll->tail->data);
+    printf("length %d\n", ll->len);
+
+    delete(ll, 1);
+    display(ll);
+
+    printf("head %d\n", ll->head->data);
+    printf("tail %d\n", ll->tail->data);
+    printf("length %d\n", ll->len);
+
+    delete(ll, 10);
     display(ll);
 
     printf("head %d\n", ll->head->data);

@@ -252,6 +252,17 @@ int isLoop(struct LinkedList *ll) {
   return 0;
 }
 
+int mid(struct LinkedList *ll) {
+    struct Node *slow = ll->head, *fast = ll->head;
+
+    while (fast && fast->next) {
+      slow = slow->next;
+      fast = fast->next->next;
+    }
+
+    return slow->data;
+}
+
 int main() {
   int arr1[4] = {2, 4, 6, 8};
   struct LinkedList *ll1 =
@@ -274,5 +285,7 @@ int main() {
   printf("tail is at for ll1: %d\n", ll1->tail->data);
   printf("tail is at for ll2: %d\n", ll2->tail->data);
 
+  printf("mid of the linkedlist is %d\n", mid(ll1));
+  printf("mid of the linkedlist is %d\n", mid(ll2));
   return 0;
 }

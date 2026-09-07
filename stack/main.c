@@ -7,9 +7,33 @@ struct Stack {
     int* arr;
 };
 
+
+int isFull(struct Stack *st) {
+    if (st->top == st->size-1) return 1;
+    return 0;
+}
+
+int isEmpty(struct Stack *st) {
+    if (st->top == -1) return 1;
+    return 0;
+}
+
 void push(struct Stack *st, int elem) {
+    if(isFull(st)) {
+        printf("stack is full\n");
+        return;
+    }
     st->top++;
     st->arr[st->top] = elem;
+}
+
+int top(struct Stack *st) {
+    if(isEmpty(st)) {
+        printf("stack is empty");
+        return -1;
+    }
+
+    return st->arr[st->top];
 }
 
 void display(struct Stack *st) {
@@ -33,8 +57,14 @@ int main()
     push(st, 3);
     push(st, 4);
     push(st, 5);
+    push(st, 6);
 
     display(st);
+
+    printf("%d\n", top(st));
+
+    free(arr);
+    free(st);
 
     return 0;
 }

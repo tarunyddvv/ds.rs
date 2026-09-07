@@ -58,6 +58,8 @@ int isLoop(struct LinkedList *ll) {
 }
 
 void insert(struct LinkedList *ll, int elem, int index) {
+    if (index > ll->len - 1 || index < 0)
+      return;
     struct Node *new_node = (struct Node *)malloc(sizeof(struct Node)), *temp = ll->head;
     new_node->data = elem;
     new_node->next = NULL;

@@ -56,12 +56,12 @@ void displayRev(struct LinkedList *ll){
 }
 
 void insert(struct LinkedList *ll, int elem, int index) {
+    if (index > ll->len - 1 || index < 0)
+      return;
     struct Node *new_node = (struct Node *)malloc(sizeof(struct Node)), *temp = ll->head;
     new_node->data = elem;
     new_node->next = NULL;
     new_node->prev = NULL;
-
-    ll->len += 1;
 
     if (index == 0) {
         new_node->next = ll->head;
@@ -82,6 +82,7 @@ void insert(struct LinkedList *ll, int elem, int index) {
         temp->next = new_node;
         new_node->prev = temp;
     }
+    ll->len += 1;
 }
 
 int main()
@@ -99,7 +100,7 @@ int main()
     printf("tail %d\n", ll->tail->data);
     printf("length %d\n", ll->len);
 
-    insert(ll, 15, 5);
+    insert(ll, 15, 4);
     insert(ll, 1, 0);
     insert(ll, 9, 2);
 

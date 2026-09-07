@@ -17,6 +17,7 @@ void insertFromArray(int arr[], int len, struct LinkedList *ll) {
   struct Node *head = (struct Node *)malloc(sizeof(struct Node));
   head->data = arr[0];
   head->next = NULL;
+  head->prev = NULL;
   ll->head = head;
   ll->tail = head;
   ll->len += 1;
@@ -55,6 +56,21 @@ void displayRev(struct LinkedList *ll){
     printf("| %d | <-> NULL\n", temp->data);
 }
 
+void reverse(struct LinkedList *ll) {
+    struct Node *temp = ll->head, *ptr = NULL;
+    ll->tail = ll->head;
+    while(temp) {
+        ptr = temp->next;
+        temp->next = temp->prev;
+        temp->prev = ptr;
+        temp = temp->prev;
+
+        if (temp != NULL && temp->next == NULL) {
+            ll->head = temp;
+        }
+    }
+}
+
 void insert(struct LinkedList *ll, int elem, int index) {
     if (index > ll->len - 1 || index < 0)
       return;
@@ -86,32 +102,36 @@ void insert(struct LinkedList *ll, int elem, int index) {
 }
 
 void delete(struct LinkedList *ll, int elem) {
-    struct Node *temp = ll->head, *prev = ll->head;
+    struct Node *temp = ll->head;
 
-    if(elem == temp->data) {
-        ll->head = temp->next;
-        temp->next = NULL;
-        temp->prev = NULL;
-        free(temp);
-    }
-
-     while(temp) {
-        if (temp->data == ll->tail->data) {
-             ll->tail = prev;
-             temp->prev = NULL;
-             prev->next = NULL;
-             free(temp);
-        }
-        if(temp->data == elem) {
-            prev->next = temp->next;
-            temp->next = NULL;
-            temp->prev = NULL;
-            free(temp);
-        }
-        prev = temp;
+    while (temp && temp->data != elem) {
         temp = temp->next;
-     }
+    }
+    if (temp == NULL)
+        return;
+
+    if (temp->prev)
+        temp->prev->next = temp->next;
+    else
+        ll->head = temp->next;
+
+    if (temp->next)
+        temp->next->prev = temp->prev;
+    else
+        ll->tail = temp->prev;
+
+    free(temp);
     ll->len -= 1;
+}
+
+void freeList(struct LinkedList *ll) {
+    struct Node *temp = ll->head;
+    while (temp) {
+        struct Node *next = temp->next;
+        free(temp);
+        temp = next;
+    }
+    free(ll);
 }
 
 int main()
@@ -119,6 +139,9 @@ int main()
     int arr[5] = {2, 4, 6, 8, 10};
 
     struct LinkedList *ll = (struct LinkedList *)malloc(sizeof(struct LinkedList));
+    ll->head = NULL;
+    ll->tail = NULL;
+    ll->len = 0;
 
     insertFromArray(arr, 5, ll);
 
@@ -148,6 +171,16 @@ int main()
     printf("head %d\n", ll->head->data);
     printf("tail %d\n", ll->tail->data);
     printf("length %d\n", ll->len);
+
+    reverse(ll);
+
+    display(ll);
+
+    printf("head %d\n", ll->head->data);
+    printf("tail %d\n", ll->tail->data);
+    printf("length %d\n", ll->len);
+
+    freeList(ll);
 
     return 0;
 }

@@ -1,3 +1,4 @@
+#include <_time.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -56,6 +57,31 @@ int isLoop(struct LinkedList *ll) {
   return 0;
 }
 
+void insert(struct LinkedList *ll, int elem, int index) {
+    struct Node *new_node = (struct Node *)malloc(sizeof(struct Node)), *temp = ll->head;
+    new_node->data = elem;
+    new_node->next = NULL;
+    ll->len += 1;
+
+    if (index == 0) {
+        ll->tail->next = new_node;
+        new_node->next = ll->head;
+        ll->head = new_node;
+    } else if (index == ll->len - 1) {
+        ll->tail->next = new_node;
+        new_node->next = ll->head;
+        ll->tail = new_node;
+    } else {
+        int count = 1;
+        while(count < index) {
+            temp = temp->next;
+            count++;
+        }
+        new_node->next = temp->next;
+        temp->next = new_node;
+    }
+}
+
 int main()
 {
     int arr1[4] = {2, 4, 6, 8};
@@ -64,8 +90,21 @@ int main()
 
     insertFromArray(arr1, 4, ll);
 
-    printf("is loop %d\n", isLoop(ll));
+    printf("head %d\n", ll->head->data);
+    printf("tail %d\n", ll->tail->data);
+    printf("length %d\n", ll->len);
 
     display(ll);
+
+    insert(ll, 1, 0);
+    insert(ll, 3, 5);
+    insert(ll, 10, 3);
+
+    display(ll);
+
+    printf("head %d\n", ll->head->data);
+    printf("tail %d\n", ll->tail->data);
+    printf("length %d\n", ll->len);
+
     return 0;
 }

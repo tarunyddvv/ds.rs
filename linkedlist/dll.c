@@ -37,20 +37,51 @@ void insertFromArray(int arr[], int len, struct LinkedList *ll) {
 
 void display(struct LinkedList *ll){
     struct Node *temp = ll->head;
+    printf("NULL <-> ");
     while (temp != NULL) {
         printf("| %d | <-> ", temp->data);
         temp = temp->next;
     }
-    printf("\n");
+    printf("NULL \n");
 }
 
 void displayRev(struct LinkedList *ll){
     struct Node *temp = ll->tail;
+    printf("NULL <-> ");
     while (temp != ll->head) {
         printf("| %d | <-> ", temp->data);
         temp = temp->prev;
     }
-    printf("| %d | <-> \n", temp->data);
+    printf("| %d | <-> NULL\n", temp->data);
+}
+
+void insert(struct LinkedList *ll, int elem, int index) {
+    struct Node *new_node = (struct Node *)malloc(sizeof(struct Node)), *temp = ll->head;
+    new_node->data = elem;
+    new_node->next = NULL;
+    new_node->prev = NULL;
+
+    ll->len += 1;
+
+    if (index == 0) {
+        new_node->next = ll->head;
+        ll->head->prev = new_node;
+        ll->head = new_node;
+    } else if (index == ll->len - 1) {
+        ll->tail->next = new_node;
+        new_node->prev = ll->tail;
+        ll->tail = new_node;
+    } else {
+        int count = 1;
+        while(count < index) {
+            temp = temp->next;
+            count++;
+        }
+        new_node->next = temp->next;
+        temp->next->prev = new_node;
+        temp->next = new_node;
+        new_node->prev = temp;
+    }
 }
 
 int main()
@@ -63,6 +94,20 @@ int main()
 
     display(ll);
     displayRev(ll);
+
+    printf("head %d\n", ll->head->data);
+    printf("tail %d\n", ll->tail->data);
+    printf("length %d\n", ll->len);
+
+    insert(ll, 15, 5);
+    insert(ll, 1, 0);
+    insert(ll, 9, 2);
+
+    display(ll);
+
+    printf("head %d\n", ll->head->data);
+    printf("tail %d\n", ll->tail->data);
+    printf("length %d\n", ll->len);
 
     return 0;
 }

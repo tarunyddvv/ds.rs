@@ -3,13 +3,13 @@
 #include <stdlib.h>
 
 struct Stack {
-  int size;
+  int capacity;
   int top;
   int *arr;
 };
 
 int isFull(struct Stack *st) {
-  if (st->top == st->size - 1)
+  if (st->top == st->capacity - 1)
     return 1;
   return 0;
 }
@@ -22,7 +22,7 @@ int isEmpty(struct Stack *st) {
 
 void push(struct Stack *st, int elem) {
   if (isFull(st)) {
-    printf("stack is full\n");
+    printf("stack overflow\n");
     return;
   }
   st->top++;
@@ -30,16 +30,25 @@ void push(struct Stack *st, int elem) {
 }
 
 int pop(struct Stack *st) {
-    if(st->top == -1) {
-        printf("stack is empty nothing to remove\n");
-        return -1;
-    }
+  if (st->top == -1) {
+    printf("stack underflow\n");
+    return -1;
+  }
 
-    int elem = st->arr[st->top];
-    st->arr[st->top] = 0;
-    st->top--;
+  int elem = st->arr[st->top];
+  st->arr[st->top] = 0;
+  st->top--;
 
-    return elem;
+  return elem;
+}
+
+int peek(struct Stack *st) {
+  if (st->top == -1) {
+    printf("stack underflow\n");
+    return -1;
+  }
+
+  return st->arr[st->top];
 }
 
 int top(struct Stack *st) {
@@ -62,7 +71,7 @@ int main() {
   struct Stack *st = (struct Stack *)malloc(5 * sizeof(int));
 
   int *arr = (int *)malloc(5 * sizeof(int));
-  st->size = 5;
+  st->capacity = 5;
   st->top = -1;
   st->arr = arr;
 
@@ -77,19 +86,21 @@ int main() {
 
   printf("%d\n", top(st));
 
-  printf("removed elem: %d\n", pop(st));
+  // printf("removed elem: %d\n", pop(st));
+
+  // printf("removed elem: %d\n", pop(st));
+
+  // printf("removed elem: %d\n", pop(st));
+
+  // printf("removed elem: %d\n", pop(st));
+
+  // printf("removed elem: %d\n", pop(st));
+
+  printf("elem at top is: %d\n", peek(st));
 
   printf("removed elem: %d\n", pop(st));
 
-  printf("removed elem: %d\n", pop(st));
-
-  printf("removed elem: %d\n", pop(st));
-
-  printf("removed elem: %d\n", pop(st));
-
-  printf("removed elem: %d\n", pop(st));
-
-  display(st);
+  printf("elem at top is: %d\n", peek(st));
 
   free(st);
   free(arr);

@@ -74,6 +74,10 @@ int main()
 
     enqueue(q, 5);
 
+    printf("head: %d\n", q->head->data);
+    printf("tail: %d\n", q->tail->data);
+    printf("len: %d\n", q->len);
+
     display(q);
 
     struct Node *curr = q->head;

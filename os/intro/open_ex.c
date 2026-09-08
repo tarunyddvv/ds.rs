@@ -1,28 +1,27 @@
+#include <errno.h>
 #include <stdio.h>
 #include <sys/fcntl.h> // for open
-#include <unistd.h> // for read, write, close
+#include <sys/stat.h>  // for umask
 #include <sys/types.h> // for umask
-#include <sys/stat.h> // for umask
-#include <errno.h>
+#include <unistd.h>    // for read, write, close
 
 const char *kFilename = "my_file";
 const int kFileExistsErr = 17;
 
-int main()
-{
-    umask(0); // set to 0 to enable all permissions to be set
+int main() {
+  umask(0); // set to 0 to enable all permissions to be set
 
-    int file_descriptor = open(kFilename, O_WRONLY | O_CREAT | O_EXCL, 0644);
+  int file_descriptor = open(kFilename, O_WRONLY | O_CREAT | O_EXCL, 0644);
 
-    if (file_descriptor == -1) {
-        printf("There was a problem creating '%s'\n", kFilename);
-        if(errno == kFileExistsErr) {
-            printf("The file already exists.\n");
-        } else {
-            printf("Unknown errorno: %d\n", errno);
-        }
-        return -1;
+  if (file_descriptor == -1) {
+    printf("There was a problem creating '%s'\n", kFilename);
+    if (errno == kFileExistsErr) {
+      printf("The file already exists.\n");
+    } else {
+      printf("Unknown errorno: %d\n", errno);
     }
-
-    return 0;
+    return -1;
+  }
+  close(file_descriptor);
+  return 0;
 }

@@ -1,8 +1,15 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
-struct Node {
+struct TNode {
+    struct TNode *left;
     int data;
+    struct TNode *right;
+};
+
+struct Node {
+    struct TNode* data;
     struct Node *next;
 };
 
@@ -12,7 +19,7 @@ struct Queue {
     int len;
 };
 
-void enqueue(struct Queue *q, int elem) {
+void enqueue(struct Queue *q, struct TNode* elem) {
     struct Node *new_node = (struct Node *)malloc(sizeof(struct Node));
     new_node->data = elem;
     new_node->next = NULL;
@@ -26,11 +33,11 @@ void enqueue(struct Queue *q, int elem) {
     q->len++;
 }
 
-int dequeue(struct Queue *q) {
-    if(q->len == 0) return -1;
+struct TNode* dequeue(struct Queue *q) {
+    if(q->len == 0) return NULL;
 
     struct Node *temp = q->head;
-    int elem = temp->data;
+    struct TNode *elem = temp->data;
     q->head = temp->next;
     q->len--;
 
@@ -39,11 +46,6 @@ int dequeue(struct Queue *q) {
     return elem;
 }
 
-void display(struct Queue *q) {
-    struct Node *temp = q->head;
-    while(temp) {
-        printf("| %d | ", temp->data);
-        temp = temp->next;
-    }
-    printf("\n");
+bool isEmpty(struct Queue *q) {
+    return q->len == 0;
 }

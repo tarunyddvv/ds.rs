@@ -62,6 +62,23 @@ void insert(struct Queue *q, struct Tree *tree, int elem) {
   }
 }
 
+void preorder(struct TNode *tree) {
+    if (tree) {
+        printf("%d ", tree->data);
+        preorder(tree->left);
+        preorder(tree->right);
+    }
+}
+
+void freeTree(struct TNode *node) {
+  if (node == NULL) {
+    return;
+  }
+  freeTree(node->left);
+  freeTree(node->right);
+  free(node);
+}
+
 int main() {
   struct Queue *q = (struct Queue *)malloc(sizeof(struct Queue));
   q->head = NULL;
@@ -70,6 +87,14 @@ int main() {
 
   struct Tree *tree = (struct Tree *)malloc(sizeof(struct Tree));
   insert(q, tree, 5);
+
+  preorder(tree->root);
+  printf("\n");
+
+
+  freeTree(tree->root);
+  free(tree);
+  free(q);
 
   return 0;
 }

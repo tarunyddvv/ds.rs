@@ -1,23 +1,4 @@
-#include <stdio.h>
-#include <stdbool.h>
-#include <stdlib.h>
-
-struct TNode {
-    struct TNode *left;
-    int data;
-    struct TNode *right;
-};
-
-struct Node {
-    struct TNode* data;
-    struct Node *next;
-};
-
-struct Queue {
-    struct Node *head;
-    struct Node *tail;
-    int len;
-};
+#include "queue.h"
 
 void enqueue(struct Queue *q, struct TNode* elem) {
     struct Node *new_node = (struct Node *)malloc(sizeof(struct Node));

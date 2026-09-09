@@ -70,6 +70,22 @@ void preorder(struct TNode *tree) {
     }
 }
 
+void inorder(struct TNode *tree) {
+    if (tree) {
+        inorder(tree->left);
+        printf("%d ", tree->data);
+        inorder(tree->right);
+    }
+}
+
+void postorder(struct TNode *tree) {
+    if (tree) {
+        postorder(tree->left);
+        postorder(tree->right);
+        printf("%d ", tree->data);
+    }
+}
+
 void freeTree(struct TNode *node) {
   if (node == NULL) {
     return;
@@ -89,6 +105,12 @@ int main() {
   insert(q, tree, 5);
 
   preorder(tree->root);
+  printf("\n");
+
+  inorder(tree->root);
+  printf("\n");
+
+  postorder(tree->root);
   printf("\n");
 
 

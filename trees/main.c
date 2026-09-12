@@ -16,7 +16,6 @@
 
 #include "queue.c"
 #include "stack.c"
-#include "stack.h"
 #include <stdio.h>
 #include <stdlib.h>
 

@@ -21,9 +21,8 @@ struct TNode* search(struct TNode *root, int elem) {
 
 void insert(struct TNode **root, int elem) {
     struct TNode *node = (struct TNode *)malloc(sizeof(struct TNode));
-    node->left = NULL;
     node->data = elem;
-    node->right = NULL;
+    node->left = node->right = NULL;
 
     if (*root == NULL) {
         *root = node;
@@ -49,6 +48,21 @@ void insert(struct TNode **root, int elem) {
     } else {
         tail->left = node;
     }
+}
+
+struct TNode *RInsert(struct TNode *root, int key) {
+    if (root == NULL) {
+        struct TNode *t = (struct TNode *)malloc(sizeof(struct TNode));
+        t->data = key;
+        t->left = t->right = NULL;
+        return t;
+    }
+    if (key < root->data)
+        root->left = RInsert(root->left, key);
+    else if (key > root->data)
+        root->right = RInsert(root->right, key);
+
+    return root;
 }
 
 void levelOrder(struct TNode *root) {
@@ -97,7 +111,7 @@ int main()
     insert(&tree->root, 25);
     insert(&tree->root, 35);
     insert(&tree->root, 50);
-    insert(&tree->root, 38);
+    RInsert(tree->root, 38);
 
     levelOrder(tree->root);
 

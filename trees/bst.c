@@ -64,10 +64,41 @@ void insert(struct Tree *tree, int elem) {
   free(q);
 }
 
+int search(struct TNode *root, int elem) {
+    struct TNode *temp = root;
+
+    while(temp != NULL) {
+        if (temp->data == elem) return 1;
+        if (temp->data > elem)
+            temp = temp->left;
+        else
+            temp = temp->right;
+    }
+    return 0;
+}
+
+void freeTree(struct TNode *node) {
+  if (node == NULL) {
+    return;
+  }
+  freeTree(node->left);
+  freeTree(node->right);
+  free(node);
+}
+
 int main()
 {
     struct Tree *tree = (struct Tree *)malloc(sizeof(struct Tree));
-    insert(tree, 8);
+    insert(tree, 30);
+
+    if (search(tree->root, 12)) {
+        printf("12 is present in the tree\n");
+    } else {
+        printf("12 is not present in the tree\n");
+    }
+
+    freeTree(tree->root);
+    free(tree);
 
     return 0;
 }

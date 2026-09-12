@@ -15,6 +15,8 @@
 // 7. if queue is empty we are done with insertion
 
 #include "queue.c"
+#include "stack.c"
+#include "stack.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -37,8 +39,13 @@ void insert(struct Queue *q, struct Tree *tree, int elem) {
   while (!isEmpty(q)) {
     ptr = dequeue(q);
 
-    printf("do we have a left node?");
-    scanf("%d", &x);
+    printf("enter left node for %d: ", ptr->data);
+    fflush(stdout);
+    if (scanf("%d", &x) != 1) {
+      ptr->left = NULL;
+      ptr->right = NULL;
+      break;
+    }
     if (x != -1) {
       temp = (struct TNode *)malloc(sizeof(struct TNode));
       temp->data = x;
@@ -46,11 +53,18 @@ void insert(struct Queue *q, struct Tree *tree, int elem) {
       temp->right = NULL;
       ptr->left = temp;
       enqueue(q, temp);
+    } else {
+      ptr->left = NULL;
     }
 
-    printf("do we have a right node?");
-    scanf("%d", &x);
+    printf("enter right node for %d: ", ptr->data);
+    fflush(stdout);
+    if (scanf("%d", &x) != 1) {
+      ptr->right = NULL;
+      break;
+    }
     if (x == -1) {
+      ptr->right = NULL;
       continue;
     }
     temp = (struct TNode *)malloc(sizeof(struct TNode));
@@ -68,6 +82,32 @@ void preorder(struct TNode *tree) {
         preorder(tree->left);
         preorder(tree->right);
     }
+}
+
+void IPreOrder(struct TNode *tree) {
+    if (tree == NULL) {
+        return;
+    }
+
+    struct Stack *st = (struct Stack *)malloc(sizeof(struct Stack));
+    st->capacity = 15;
+    st->top = -1;
+    st->arr = (struct TNode **)malloc(st->capacity * sizeof(struct TNode *));
+
+    struct TNode *ptr = tree;
+
+    while (ptr != NULL || !isEmptyS(st)) {
+        while (ptr != NULL) {
+            printf("%d ", ptr->data);
+            push(st, ptr);
+            ptr = ptr->left;
+        }
+        ptr = pop(st);
+        ptr = ptr->right;
+    }
+
+    free(st->arr);
+    free(st);
 }
 
 void inorder(struct TNode *tree) {
@@ -102,9 +142,14 @@ int main() {
   q->len = 0;
 
   struct Tree *tree = (struct Tree *)malloc(sizeof(struct Tree));
-  insert(q, tree, 5);
+  insert(q, tree, 8);
 
+  printf("recursive preorder ");
   preorder(tree->root);
+  printf("\n");
+
+  printf("iterative preorder ");
+  IPreOrder(tree->root);
   printf("\n");
 
   inorder(tree->root);

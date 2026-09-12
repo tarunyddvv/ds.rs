@@ -24,7 +24,12 @@ struct Tree {
   struct TNode *root;
 };
 
-void insert(struct Queue *q, struct Tree *tree, int elem) {
+void insert(struct Tree *tree, int elem) {
+  struct Queue *q = (struct Queue *)malloc(sizeof(struct Queue));
+  q->head = NULL;
+  q->tail = NULL;
+  q->len = 0;
+
   struct TNode *temp = NULL, *ptr = NULL;
   int x = 0;
 
@@ -74,138 +79,139 @@ void insert(struct Queue *q, struct Tree *tree, int elem) {
     ptr->right = temp;
     enqueue(q, temp);
   }
+  free(q);
 }
 
 void preorder(struct TNode *tree) {
-    if (tree) {
-        printf("%d ", tree->data);
-        preorder(tree->left);
-        preorder(tree->right);
-    }
+  if (tree) {
+    printf("%d ", tree->data);
+    preorder(tree->left);
+    preorder(tree->right);
+  }
 }
 
 void IPreOrder(struct TNode *tree) {
-    if (tree == NULL) {
-        return;
+  if (tree == NULL) {
+    return;
+  }
+
+  struct Stack *st = (struct Stack *)malloc(sizeof(struct Stack));
+  st->capacity = 15;
+  st->top = -1;
+  st->arr = (struct TNode **)malloc(st->capacity * sizeof(struct TNode *));
+
+  struct TNode *ptr = tree;
+
+  while (ptr != NULL || !isEmptyS(st)) {
+    if (ptr != NULL) {
+      printf("%d ", ptr->data);
+      push(st, ptr);
+      ptr = ptr->left;
+    } else {
+      ptr = pop(st);
+      ptr = ptr->right;
     }
+  }
 
-    struct Stack *st = (struct Stack *)malloc(sizeof(struct Stack));
-    st->capacity = 15;
-    st->top = -1;
-    st->arr = (struct TNode **)malloc(st->capacity * sizeof(struct TNode *));
-
-    struct TNode *ptr = tree;
-
-    while (ptr != NULL || !isEmptyS(st)) {
-        if (ptr != NULL) {
-            printf("%d ", ptr->data);
-            push(st, ptr);
-            ptr = ptr->left;
-        } else {
-            ptr = pop(st);
-            ptr = ptr->right;
-        }
-    }
-
-    free(st->arr);
-    free(st);
+  free(st->arr);
+  free(st);
 }
 
 void IInOrder(struct TNode *tree) {
-    if (tree == NULL) {
-        return;
+  if (tree == NULL) {
+    return;
+  }
+
+  struct Stack *st = (struct Stack *)malloc(sizeof(struct Stack));
+  st->capacity = 15;
+  st->top = -1;
+  st->arr = (struct TNode **)malloc(st->capacity * sizeof(struct TNode *));
+
+  struct TNode *ptr = tree;
+
+  while (ptr != NULL || !isEmptyS(st)) {
+    if (ptr != NULL) {
+      push(st, ptr);
+      ptr = ptr->left;
+    } else {
+      ptr = pop(st);
+      printf("%d ", ptr->data);
+      ptr = ptr->right;
     }
+  }
 
-    struct Stack *st = (struct Stack *)malloc(sizeof(struct Stack));
-    st->capacity = 15;
-    st->top = -1;
-    st->arr = (struct TNode **)malloc(st->capacity * sizeof(struct TNode *));
-
-    struct TNode *ptr = tree;
-
-    while (ptr != NULL || !isEmptyS(st)) {
-        if (ptr != NULL) {
-            push(st, ptr);
-            ptr = ptr->left;
-        } else {
-            ptr = pop(st);
-            printf("%d ", ptr->data);
-            ptr = ptr->right;
-        }
-    }
-
-    free(st->arr);
-    free(st);
+  free(st->arr);
+  free(st);
 }
 
 int count(struct TNode *root) {
-    if (root){
-        return count(root->left) + count(root->right) + 1;
-    }
-    return 0;
+  if (root) {
+    return count(root->left) + count(root->right) + 1;
+  }
+  return 0;
 }
 
 int sum(struct TNode *root) {
-    int x = 0, y = 0;
-    if (root){
-        x = sum(root->left);
-        y = sum(root->right);
-        return x + y + root->data;
-    }
-    return 0;
+  int x = 0, y = 0;
+  if (root) {
+    x = sum(root->left);
+    y = sum(root->right);
+    return x + y + root->data;
+  }
+  return 0;
 }
 
 int height(struct TNode *root) {
-    int x = 0, y = 0;
-    if(root == NULL)
-        return 0;
-    x = height(root->left);
-    y = height(root->right);
-    if(x>y)
-        return x + 1;
-    else
-        return y + 1;
+  int x = 0, y = 0;
+  if (root == NULL)
+    return 0;
+  x = height(root->left);
+  y = height(root->right);
+  if (x > y)
+    return x + 1;
+  else
+    return y + 1;
 }
 
 void levelOrder(struct TNode *root) {
-    struct TNode *temp = root;
-    struct Queue *q = (struct Queue *)malloc(sizeof(struct Queue));
-    q->head = NULL;
-    q->tail = NULL;
-    q->len = 0;
+  struct TNode *temp = root;
+  struct Queue *q = (struct Queue *)malloc(sizeof(struct Queue));
+  q->head = NULL;
+  q->tail = NULL;
+  q->len = 0;
 
-    printf("%d ", root->data);
-    enqueue(q, root);
+  printf("%d ", root->data);
+  enqueue(q, root);
 
-    while(!isEmpty(q)) {
-        temp = dequeue(q);
-        if(temp->left != NULL) {
-            printf("%d ", temp->left->data);
-            enqueue(q, temp->left);
-        }
-        if(temp->right != NULL) {
-            printf("%d ", temp->right->data);
-            enqueue(q, temp->right);
-        }
+  while (!isEmpty(q)) {
+    temp = dequeue(q);
+    if (temp->left != NULL) {
+      printf("%d ", temp->left->data);
+      enqueue(q, temp->left);
     }
-    printf("\n");
-    free(q);
+    if (temp->right != NULL) {
+      printf("%d ", temp->right->data);
+      enqueue(q, temp->right);
+    }
+  }
+  printf("\n");
+  free(q);
 }
 
 void inorder(struct TNode *tree) {
-    if (tree) {
-        inorder(tree->left);
-        printf("%d ", tree->data);
-        inorder(tree->right);
-    }
+  if (tree) {
+    inorder(tree->left);
+    printf("%d ", tree->data);
+    inorder(tree->right);
+  }
 }
 
 void postorder(struct TNode *tree) {
-    if (tree) {
-        postorder(tree->left);
-        postorder(tree->right);
-        printf("%d ", tree->data);
-    }
+  if (tree) {
+    postorder(tree->left);
+    postorder(tree->right);
+    printf("%d ", tree->data);
+  }
 }
 
 void freeTree(struct TNode *node) {
@@ -218,13 +224,8 @@ void freeTree(struct TNode *node) {
 }
 
 int main() {
-  struct Queue *q = (struct Queue *)malloc(sizeof(struct Queue));
-  q->head = NULL;
-  q->tail = NULL;
-  q->len = 0;
-
   struct Tree *tree = (struct Tree *)malloc(sizeof(struct Tree));
-  insert(q, tree, 8);
+  insert(tree, 8);
 
   printf("recursive preorder ");
   preorder(tree->root);
@@ -255,7 +256,6 @@ int main() {
 
   freeTree(tree->root);
   free(tree);
-  free(q);
 
   return 0;
 }

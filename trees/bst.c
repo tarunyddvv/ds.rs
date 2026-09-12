@@ -77,13 +77,17 @@ int search(struct TNode *root, int elem) {
     return 0;
 }
 
-void insertAt(struct TNode *root, int elem) {
+void insertAt(struct TNode **root, int elem) {
     struct TNode *node = (struct TNode *)malloc(sizeof(struct TNode));
     node->left = NULL;
     node->data = elem;
     node->right = NULL;
 
-    struct TNode *temp = root, *tail = NULL;
+    if (*root == NULL) {
+        *root = node;
+        return;
+    }
+    struct TNode *temp = *root, *tail = NULL;
     while (temp) {
         if (temp->data == elem) {
             printf("element is already present in the tree");
@@ -142,15 +146,24 @@ void freeTree(struct TNode *node) {
 int main()
 {
     struct Tree *tree = (struct Tree *)malloc(sizeof(struct Tree));
+    tree->root = NULL;
     insert(tree, 30);
 
-    if (search(tree->root, 12)) {
-        printf("12 is present in the tree\n");
-    } else {
-        printf("12 is not present in the tree\n");
-    }
+    // if (search(tree->root, 12)) {
+    //     printf("12 is present in the tree\n");
+    // } else {
+    //     printf("12 is not present in the tree\n");
+    // }
 
-    insertAt(tree->root, 38);
+    // insertAt(&tree->root, 30);
+    // insertAt(&tree->root, 20);
+    // insertAt(&tree->root, 40);
+    // insertAt(&tree->root, 10);
+    // insertAt(&tree->root, 25);
+    // insertAt(&tree->root, 35);
+    // insertAt(&tree->root, 50);
+    insertAt(&tree->root, 38);
+
     levelOrder(tree->root);
 
     freeTree(tree->root);

@@ -97,13 +97,41 @@ void IPreOrder(struct TNode *tree) {
     struct TNode *ptr = tree;
 
     while (ptr != NULL || !isEmptyS(st)) {
-        while (ptr != NULL) {
+        if (ptr != NULL) {
             printf("%d ", ptr->data);
             push(st, ptr);
             ptr = ptr->left;
+        } else {
+            ptr = pop(st);
+            ptr = ptr->right;
         }
-        ptr = pop(st);
-        ptr = ptr->right;
+    }
+
+    free(st->arr);
+    free(st);
+}
+
+void IInOrder(struct TNode *tree) {
+    if (tree == NULL) {
+        return;
+    }
+
+    struct Stack *st = (struct Stack *)malloc(sizeof(struct Stack));
+    st->capacity = 15;
+    st->top = -1;
+    st->arr = (struct TNode **)malloc(st->capacity * sizeof(struct TNode *));
+
+    struct TNode *ptr = tree;
+
+    while (ptr != NULL || !isEmptyS(st)) {
+        if (ptr != NULL) {
+            push(st, ptr);
+            ptr = ptr->left;
+        } else {
+            ptr = pop(st);
+            printf("%d ", ptr->data);
+            ptr = ptr->right;
+        }
     }
 
     free(st->arr);
@@ -152,12 +180,17 @@ int main() {
   IPreOrder(tree->root);
   printf("\n");
 
+  printf("recursive inorder ");
   inorder(tree->root);
   printf("\n");
 
-  postorder(tree->root);
+  printf("iterative inorder ");
+  IInOrder(tree->root);
   printf("\n");
 
+  printf("recursive postorder ");
+  postorder(tree->root);
+  printf("\n");
 
   freeTree(tree->root);
   free(tree);

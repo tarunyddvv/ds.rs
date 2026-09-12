@@ -138,6 +138,35 @@ void IInOrder(struct TNode *tree) {
     free(st);
 }
 
+int count(struct TNode *root) {
+    if (root){
+        return count(root->left) + count(root->right) + 1;
+    }
+    return 0;
+}
+
+int sum(struct TNode *root) {
+    int x = 0, y = 0;
+    if (root){
+        x = sum(root->left);
+        y = sum(root->right);
+        return x + y + root->data;
+    }
+    return 0;
+}
+
+int height(struct TNode *root) {
+    int x = 0, y = 0;
+    if(root == NULL)
+        return 0;
+    x = height(root->left);
+    y = height(root->right);
+    if(x>y)
+        return x + 1;
+    else
+        return y + 1;
+}
+
 void levelOrder(struct TNode *root) {
     struct TNode *temp = root;
     struct Queue *q = (struct Queue *)malloc(sizeof(struct Queue));
@@ -219,6 +248,10 @@ int main() {
 
   printf("level order traversal ");
   levelOrder(tree->root);
+
+  printf("count: %d \n", count(tree->root));
+  printf("sum: %d \n", sum(tree->root));
+  printf("height: %d \n", height(tree->root));
 
   freeTree(tree->root);
   free(tree);

@@ -138,6 +138,31 @@ void IInOrder(struct TNode *tree) {
     free(st);
 }
 
+void levelOrder(struct TNode *root) {
+    struct TNode *temp = root;
+    struct Queue *q = (struct Queue *)malloc(sizeof(struct Queue));
+    q->head = NULL;
+    q->tail = NULL;
+    q->len = 0;
+
+    printf("%d ", root->data);
+    enqueue(q, root);
+
+    while(!isEmpty(q)) {
+        temp = dequeue(q);
+        if(temp->left != NULL) {
+            printf("%d ", temp->left->data);
+            enqueue(q, temp->left);
+        }
+        if(temp->right != NULL) {
+            printf("%d ", temp->right->data);
+            enqueue(q, temp->right);
+        }
+    }
+    printf("\n");
+    free(q);
+}
+
 void inorder(struct TNode *tree) {
     if (tree) {
         inorder(tree->left);
@@ -191,6 +216,9 @@ int main() {
   printf("recursive postorder ");
   postorder(tree->root);
   printf("\n");
+
+  printf("level order traversal ");
+  levelOrder(tree->root);
 
   freeTree(tree->root);
   free(tree);

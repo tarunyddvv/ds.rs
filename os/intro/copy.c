@@ -14,10 +14,11 @@ int main(int argc, char *argv[]) {
     ssize_t bytesRead = read(fdin, buffer, sizeof(buffer));
     if (bytesRead == 0)
       break;
-    size_t bytesWritten = 0;
+    ssize_t bytesWritten = 0;
     while (bytesWritten < bytesRead) {
       bytesWritten +=
-          write(fdout, buffer + bytesWritten, bytesRead - bytesWritten);
+          write(fdout, buffer + bytesWritten /* cursor inside the buffer */,
+                bytesRead - bytesWritten);
     }
   }
 

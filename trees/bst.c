@@ -65,6 +65,18 @@ struct TNode *RInsert(struct TNode *root, int key) {
     return root;
 }
 
+struct TNode *Delete(struct TNode *root, int key) {
+    if (key < root->data)
+        root->left = Delete(root->left, key);
+    else if (key > root->data)
+        root->right = Delete(root->right, key);
+    else {
+
+    }
+
+    return root;
+}
+
 void levelOrder(struct TNode *root) {
   struct TNode *temp = root;
   struct Queue *q = (struct Queue *)malloc(sizeof(struct Queue));
@@ -99,6 +111,17 @@ void freeTree(struct TNode *node) {
   free(node);
 }
 
+void print(struct TNode *root, char *indent) {
+  if (root == NULL) {
+    return;
+  }
+  char new_indent[256];
+  snprintf(new_indent, sizeof(new_indent), "%s    ", indent);
+  print(root->right, new_indent);
+  printf("%s%d\n", indent, root->data);
+  print(root->left, new_indent);
+}
+
 int main()
 {
     struct Tree *tree = (struct Tree *)malloc(sizeof(struct Tree));
@@ -129,6 +152,8 @@ int main()
         else
             printf("elem has no right child\n");
     }
+
+    print(tree->root, "");
 
     freeTree(tree->root);
     free(tree);

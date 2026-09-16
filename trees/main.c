@@ -213,6 +213,17 @@ void postorder(struct TNode *tree) {
   }
 }
 
+void print(struct TNode *root, char *indent) {
+  if (root == NULL) {
+    return;
+  }
+  char new_indent[256];
+  snprintf(new_indent, sizeof(new_indent), "%s    ", indent);
+  print(root->right, new_indent);
+  printf("%s%d\n", indent, root->data);
+  print(root->left, new_indent);
+}
+
 void freeTree(struct TNode *node) {
   if (node == NULL) {
     return;
@@ -252,6 +263,8 @@ int main() {
   printf("count: %d \n", count(tree->root));
   printf("sum: %d \n", sum(tree->root));
   printf("height: %d \n", height(tree->root));
+
+  print(tree->root, "");
 
   freeTree(tree->root);
   free(tree);

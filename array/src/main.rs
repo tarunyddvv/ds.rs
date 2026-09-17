@@ -1,5 +1,7 @@
 use array::Array;
 
+mod vec;
+
 fn main() {
     let mut arr = Array::new();
     arr.push(10);
